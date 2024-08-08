@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - "10.10.5.4:5678:5678"
+    environment:
+      - N8N_HOST=${DOMAIN_NAME}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://${DOMAIN_NAME}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_SSL_CERT=/home/certs/server.crt
+      - N8N_SSL_KEY=/home/certs/server.key
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - /home/rguser/certs:/home/certs:ro
+
+volumes:
+  n8n_data:
+    external: true
